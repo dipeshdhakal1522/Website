@@ -455,8 +455,6 @@ function termPrint(text, cls) {
 
 function termCommand(cmd) {
   const t = cmd.trim().toLowerCase();
-    '\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\n';
-
   switch (t) {
     case 'help':
       termPrint('Available commands:', 'ok');
@@ -593,7 +591,7 @@ $('#copy-email').addEventListener('click', async () => {
     const btn = $('#copy-email');
     btn.textContent = 'Copied!';
     setTimeout(() => (btn.textContent = 'Copy'), 2000);
-  } catch (_err) {
+  } catch {
     window.prompt('Copy email:', DATA.email);
   }
 });
