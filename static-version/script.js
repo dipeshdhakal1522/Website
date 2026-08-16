@@ -721,6 +721,10 @@ const CHAT_KNOWLEDGE = [
     reply: 'Use the "Download CV" button in the sidebar to view the full resume with education, experience, and skills.'
   },
   {
+    keywords: ['whatsapp', 'wa', 'direct chat'],
+    reply: 'You can message Dipesh directly on WhatsApp: https://wa.me/dipeshdhakal1522'
+  },
+  {
     keywords: ['thanks', 'thank you', 'thx', 'appreciate'],
     reply: 'You are welcome! Feel free to ask anything else about Dipesh\u2019s work. \uD83D\uDE42'
   },
@@ -734,15 +738,29 @@ const CHAT_SUGGESTIONS = ['Who is Dipesh Dhakal?', 'What are his skills?', 'Top 
 function chatAnswer(input) {
   const q = String(input).toLowerCase().trim();
   for (const item of CHAT_KNOWLEDGE) {
-    if (item.keywords.some((k) => q.includes(k))) return item.reply;
+    if (item.keywords.some((k) => q.includes(k))) return { text: item.reply, matched: true };
   }
-  return 'I am not sure about that one. Try asking about skills, projects, education, experience, or contact details.';
+  return {
+    text: 'I am not sure about that one. Try asking about skills, projects, education, experience, or contact details \u2014 or send it directly to Dipesh on WhatsApp.',
+    matched: false
+  };
 }
 
-function chatAdd(text, role) {
+const WA_LINK = 'https://wa.me/dipeshdhakal1522';
+
+function chatAdd(text, role, waText) {
   const div = document.createElement('div');
   div.className = 'msg ' + role;
   div.textContent = text;
+  if (waText) {
+    const link = document.createElement('a');
+    link.className = 'chat-wa';
+    link.href = WA_LINK + '?text=' + encodeURIComponent('Hi Dipesh, regarding: ' + waText);
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.textContent = 'Chat on WhatsApp \u2192';
+    div.appendChild(link);
+  }
   chatBody.appendChild(div);
   chatBody.scrollTop = chatBody.scrollHeight;
 }
@@ -759,7 +777,8 @@ function chatSend(text) {
   chatBody.scrollTop = chatBody.scrollHeight;
   setTimeout(() => {
     dots.remove();
-    chatAdd(chatAnswer(clean), 'bot');
+    const { text: reply, matched } = chatAnswer(clean);
+    chatAdd(reply, 'bot', matched ? null : clean);
   }, 700);
 }
 

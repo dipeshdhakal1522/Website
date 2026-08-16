@@ -982,6 +982,34 @@ img { max-width: 100%; display: block; }
 
 .chat-send:hover { filter: brightness(1.1); }
 
+.msg .chat-wa {
+  display: inline-flex;
+  margin-top: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: var(--emerald);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.msg .chat-wa:hover { background: rgba(16, 185, 129, 0.25); }
+
+.chat-wa-hint {
+  padding: 0 0.9rem 0.8rem;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--faint);
+}
+
+.chat-wa-hint a { color: var(--emerald); text-decoration: none; }
+.chat-wa-hint a:hover { text-decoration: underline; }
+
 /* ===== Responsive ===== */
 @media (min-width: 640px) {
   .content { padding: 1.5rem 2rem 1.5rem 14rem; }
