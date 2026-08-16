@@ -641,12 +641,16 @@ const CHAT_KNOWLEDGE = [
     reply: 'Hello! I am Enigma, the AI assistant for this portfolio. Ask me about Dipesh\'s skills, projects, education, experience, or contact details.'
   },
   {
-    keywords: ['who are you', 'your name', 'about you'],
+    keywords: ['about dipesh', 'tell me about', 'about him', 'about dipesh dhakal', 'who is dipesh', 'who is dipesh dhakal', 'dipesh dhakal'],
+    reply: DATA.bio + ' ' + DATA.aboutParagraphs[0]
+  },
+  {
+    keywords: ['who are you', 'your name', 'about you', 'what are you'],
     reply: 'I am Enigma \u2014 a portfolio assistant that knows everything about Dipesh Dhakal: skills, projects, education, and how to reach him. Try asking "What are his skills?" or "Top projects?".'
   },
   {
-    keywords: ['about dipesh', 'tell me about', 'about him', 'who is dipesh'],
-    reply: DATA.bio + ' ' + DATA.aboutParagraphs[0]
+    keywords: ['full skills', 'all skills', 'complete skills'],
+    reply: DATA.skills.map((c) => c.title + '\n' + c.skills.map(([n, l]) => '  \u2022 ' + n + ' [' + l + ']').join('\n')).join('\n\n')
   },
   {
     keywords: ['skill', 'tech', 'tools', 'competenc', 'stack', 'languages'],
@@ -655,11 +659,7 @@ const CHAT_KNOWLEDGE = [
       '\nAsk "full skills" for the complete list.'
   },
   {
-    keywords: ['full skills', 'all skills', 'complete skills'],
-    reply: DATA.skills.map((c) => c.title + '\n' + c.skills.map(([n, l]) => '  \u2022 ' + n + ' [' + l + ']').join('\n')).join('\n\n')
-  },
-  {
-    keywords: ['project', 'portfolio', 'work', 'built', 'code'],
+    keywords: ['project', 'portfolio', 'built', 'code', 'work'],
     reply: DATA.projects.map((p) => '\u2022 ' + p.title + ' \u2014 ' + p.subtitle + ' (' + p.category + ')\n  ' + p.github).join('\n') +
       '\n\nAsk about any project by name (e.g. "SaanjhCyber") for details.'
   },
@@ -698,15 +698,11 @@ const CHAT_KNOWLEDGE = [
       '\n\nIn total: 15+ certifications.'
   },
   {
-    keywords: ['contact', 'email', 'phone', 'reach', 'message', 'connect'],
-    reply: 'You can reach Dipesh at:\n\u2022 Email: ' + DATA.email + '\n\u2022 Phone: ' + DATA.phone + '\n\u2022 LinkedIn: ' + DATA.linkedin + '\n\u2022 GitHub: ' + DATA.github + '\n\u2022 WhatsApp: ' + DATA.whatsapp + '\n\nOr use the contact form on this page.'
-  },
-  {
     keywords: ['facebook', 'facbook', 'facebok', 'fb page', 'facebook page'],
     reply: 'Facebook page: https://www.facebook.com/share/1BT9YVq5tp/'
   },
   {
-    keywords: ['social', 'socials', 'social media', 'instagram', 'facebook', 'twitter', 'x ', 'youtube', 'linkedin', 'follow'],
+    keywords: ['social', 'socials', 'social media', 'instagram', 'twitter', 'youtube', 'linkedin', 'follow', 'handles'],
     reply: 'Connect with Dipesh across platforms:\n' +
       '\u2022 LinkedIn: ' + DATA.linkedin + '\n' +
       '\u2022 Instagram: ' + DATA.instagram + '\n' +
@@ -715,6 +711,14 @@ const CHAT_KNOWLEDGE = [
       '\u2022 X (Twitter): ' + DATA.twitter + '\n' +
       '\u2022 YouTube: ' + DATA.youtube + '\n' +
       '\u2022 GitHub: ' + DATA.github
+  },
+  {
+    keywords: ['whatsapp', 'whatsap', 'wa.me', 'direct chat'],
+    reply: 'You can message Dipesh directly on WhatsApp: https://wa.me/dipeshdhakal1522'
+  },
+  {
+    keywords: ['contact', 'email', 'phone', 'reach', 'message'],
+    reply: 'You can reach Dipesh at:\n\u2022 Email: ' + DATA.email + '\n\u2022 Phone: ' + DATA.phone + '\n\u2022 LinkedIn: ' + DATA.linkedin + '\n\u2022 GitHub: ' + DATA.github + '\n\u2022 WhatsApp: ' + DATA.whatsapp + '\n\nOr use the contact form on this page.'
   },
   {
     keywords: ['location', 'where', 'based', 'kathmandu', 'nepal'],
@@ -746,11 +750,11 @@ const CHAT_KNOWLEDGE = [
     reply: 'Use the "Download CV" button in the sidebar to view the full resume with education, experience, and skills.'
   },
   {
-    keywords: ['whatsapp', 'wa', 'direct chat'],
+    keywords: ['whatsapp', 'whatsap', 'wa.me', 'direct chat'],
     reply: 'You can message Dipesh directly on WhatsApp: https://wa.me/dipeshdhakal1522'
   },
   {
-    keywords: ['thanks', 'thank you', 'thx', 'appreciate'],
+    keywords: ['thanks', 'thank you', 'thx', 'dhan', 'dhanyabad', 'appreciate'],
     reply: 'You are welcome! Feel free to ask anything else about Dipesh\u2019s work. \uD83D\uDE42'
   },
   {
@@ -780,10 +784,16 @@ function levenshtein(a, b) {
 }
 
 function fuzzyMatch(q, keyword) {
-  if (q.includes(keyword)) return true;
+  if (keyword.length <= 4) {
+    if (new RegExp('\\b' + keyword + '\\b').test(q)) return true;
+  } else if (q.includes(keyword)) {
+    return true;
+  }
+  if (keyword.includes(' ')) {
+    return levenshtein(q, keyword) <= 2;
+  }
   const words = q.split(/\s+/).filter((w) => w.length >= 4);
-  const kwWords = keyword.split(/\s+/);
-  return words.some((w) => kwWords.some((kw) => levenshtein(w, kw) <= (w.length >= 6 ? 2 : 1)));
+  return words.some((w) => levenshtein(w, keyword) <= (w.length >= 6 ? 2 : 1));
 }
 
 function chatAnswer(input) {
