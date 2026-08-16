@@ -756,10 +756,36 @@ const CHAT_KNOWLEDGE = [
 ];
 const CHAT_SUGGESTIONS = ['Who is Dipesh Dhakal?', 'What are his skills?', 'Top projects', 'Education', 'How to contact?'];
 
+function levenshtein(a, b) {
+  const m = a.length;
+  const n = b.length;
+  if (!m) return n;
+  if (!n) return m;
+  const dp = Array.from({ length: m + 1 }, (_, i) => [i, ...Array(n).fill(0)]);
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1,
+        dp[i][j - 1] + 1,
+        dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+      );
+    }
+  }
+  return dp[m][n];
+}
+
+function fuzzyMatch(q, keyword) {
+  if (q.includes(keyword)) return true;
+  const words = q.split(/\s+/).filter((w) => w.length >= 4);
+  const kwWords = keyword.split(/\s+/);
+  return words.some((w) => kwWords.some((kw) => levenshtein(w, kw) <= (w.length >= 6 ? 2 : 1)));
+}
+
 function chatAnswer(input) {
   const q = String(input).toLowerCase().trim();
   for (const item of CHAT_KNOWLEDGE) {
-    if (item.keywords.some((k) => q.includes(k))) return { text: item.reply, matched: true };
+    if (item.keywords.some((k) => fuzzyMatch(q, k))) return { text: item.reply, matched: true };
   }
   return {
     text: 'I am not sure about that one. Try asking about skills, projects, education, experience, or contact details \u2014 or send it directly to Dipesh on WhatsApp.',
