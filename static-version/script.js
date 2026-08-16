@@ -702,6 +702,10 @@ const CHAT_KNOWLEDGE = [
     reply: 'You can reach Dipesh at:\n\u2022 Email: ' + DATA.email + '\n\u2022 Phone: ' + DATA.phone + '\n\u2022 LinkedIn: ' + DATA.linkedin + '\n\u2022 GitHub: ' + DATA.github + '\n\u2022 WhatsApp: ' + DATA.whatsapp + '\n\nOr use the contact form on this page.'
   },
   {
+    keywords: ['facebook', 'facbook', 'facebok', 'fb page', 'facebook page'],
+    reply: 'Facebook page: https://www.facebook.com/share/1BT9YVq5tp/'
+  },
+  {
     keywords: ['social', 'socials', 'social media', 'instagram', 'facebook', 'twitter', 'x ', 'youtube', 'linkedin', 'follow'],
     reply: 'Connect with Dipesh across platforms:\n' +
       '\u2022 LinkedIn: ' + DATA.linkedin + '\n' +
