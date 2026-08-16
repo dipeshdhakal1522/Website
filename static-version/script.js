@@ -638,11 +638,11 @@ const chatInput = $('#chat-input');
 const CHAT_KNOWLEDGE = [
   {
     keywords: ['hi', 'hello', 'hey', 'namaste', 'namaskar', 'hola'],
-    reply: 'Hello! I am DipeshBot, the AI assistant for this portfolio. Ask me about Dipesh\'s skills, projects, education, experience, or contact details.'
+    reply: 'Hello! I am Enigma, the AI assistant for this portfolio. Ask me about Dipesh\'s skills, projects, education, experience, or contact details.'
   },
   {
     keywords: ['who are you', 'your name', 'about you'],
-    reply: 'I am DipeshBot \u2014 a portfolio assistant that knows everything about Dipesh Dhakal: skills, projects, education, and how to reach him. Try asking "What are his skills?" or "Top projects?".'
+    reply: 'I am Enigma \u2014 a portfolio assistant that knows everything about Dipesh Dhakal: skills, projects, education, and how to reach him. Try asking "What are his skills?" or "Top projects?".'
   },
   {
     keywords: ['about dipesh', 'tell me about', 'about him', 'who is dipesh'],
@@ -769,7 +769,7 @@ $('#chat-toggle').addEventListener('click', () => {
   panel.classList.toggle('open');
   $('#chat-toggle').textContent = wasOpen ? '\u{1F916}' : '\u00D7';
   if (!wasOpen && chatBody.children.length === 0) {
-    chatAdd('Hi! I am DipeshBot \u{1F916} \u2014 ask me anything about Dipesh Dhakal\'s portfolio.', 'bot');
+    chatAdd('Hi! I am Enigma \u{1F916} \u2014 ask me anything about Dipesh Dhakal\'s portfolio.', 'bot');
   }
   if (!wasOpen) setTimeout(() => chatInput.focus(), 50);
 });
