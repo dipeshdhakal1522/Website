@@ -593,7 +593,7 @@ $('#copy-email').addEventListener('click', async () => {
     const btn = $('#copy-email');
     btn.textContent = 'Copied!';
     setTimeout(() => (btn.textContent = 'Copy'), 2000);
-  } catch (err) {
+  } catch (_err) {
     window.prompt('Copy email:', DATA.email);
   }
 });
