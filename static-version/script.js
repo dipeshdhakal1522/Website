@@ -660,7 +660,7 @@ const CHAT_KNOWLEDGE = [
   },
   {
     keywords: ['project', 'portfolio', 'work', 'built', 'code'],
-    reply: DATA.projects.map((p) => '\u2022 ' + p.title + ' \u2014 ' + p.subtitle + ' (' + p.category + ')').join('\n') +
+    reply: DATA.projects.map((p) => '\u2022 ' + p.title + ' \u2014 ' + p.subtitle + ' (' + p.category + ')\n  ' + p.github).join('\n') +
       '\n\nAsk about any project by name (e.g. "SaanjhCyber") for details.'
   },
   {
@@ -681,7 +681,7 @@ const CHAT_KNOWLEDGE = [
   },
   {
     keywords: ['education', 'study', 'university', 'degree', 'college', 'academic'],
-    reply: DATA.education.map((e) => '\u2022 ' + e.degree + '\n  ' + e.institution + ' \u2014 ' + e.duration).join('\n')
+    reply: DATA.education.map((e) => '\u2022 ' + e.degree + '\n  ' + e.institution + ' \u2014 ' + e.duration + (e.url ? '\n  ' + e.url : '')).join('\n')
   },
   {
     keywords: ['coventry', 'bsc', 'hons', 'ethical hacking'],
@@ -694,19 +694,40 @@ const CHAT_KNOWLEDGE = [
   },
   {
     keywords: ['certificate', 'certification', 'award', 'credential'],
-    reply: 'Dipesh holds 15+ certifications across cybersecurity, networking, UI/UX, and training programs, including Ethical Hacking & Web Application Security (Coventry University) and Enterprise Networking (Nepal Telecom Training).'
+    reply: DATA.certificates.map((c) => '\u2022 ' + c.title + ' \u2014 ' + c.org + ' (' + c.date + ')').join('\n') +
+      '\n\nIn total: 15+ certifications.'
   },
   {
     keywords: ['contact', 'email', 'phone', 'reach', 'message', 'connect'],
-    reply: 'You can reach Dipesh at:\n\u2022 Email: ' + DATA.email + '\n\u2022 Phone: ' + DATA.phone + '\n\u2022 LinkedIn: ' + DATA.linkedin + '\n\nOr use the contact form on this page.'
+    reply: 'You can reach Dipesh at:\n\u2022 Email: ' + DATA.email + '\n\u2022 Phone: ' + DATA.phone + '\n\u2022 LinkedIn: ' + DATA.linkedin + '\n\u2022 GitHub: ' + DATA.github + '\n\u2022 WhatsApp: ' + DATA.whatsapp + '\n\nOr use the contact form on this page.'
+  },
+  {
+    keywords: ['social', 'socials', 'social media', 'instagram', 'facebook', 'twitter', 'x ', 'youtube', 'linkedin', 'follow'],
+    reply: 'Connect with Dipesh across platforms:\n' +
+      '\u2022 LinkedIn: ' + DATA.linkedin + '\n' +
+      '\u2022 Instagram: ' + DATA.instagram + '\n' +
+      '\u2022 Facebook: ' + DATA.facebook + '\n' +
+      '\u2022 WhatsApp: ' + DATA.whatsapp + '\n' +
+      '\u2022 X (Twitter): ' + DATA.twitter + '\n' +
+      '\u2022 YouTube: ' + DATA.youtube + '\n' +
+      '\u2022 GitHub: ' + DATA.github
   },
   {
     keywords: ['location', 'where', 'based', 'kathmandu', 'nepal'],
     reply: 'Dipesh is based in ' + DATA.location + '.'
   },
   {
-    keywords: ['github', 'open source', 'repos', 'repository'],
-    reply: 'GitHub: ' + DATA.github + '\n\nRepositories include SaanjhCyber, NoirLink Trading, File Integrity System, and News Crawler.'
+    keywords: ['github', 'open source', 'repos', 'repository', 'repositories'],
+    reply: 'GitHub: ' + DATA.github + '\n\nRepositories:\n' +
+      DATA.projects.map((p) => '\u2022 ' + p.title + ': ' + p.github).join('\n')
+  },
+  {
+    keywords: ['stats', 'statistics', 'numbers', 'metrics'],
+    reply: DATA.stats.map((s) => '\u2022 ' + s.value + ' ' + s.label).join('\n')
+  },
+  {
+    keywords: ['website', 'portfolio site', 'this site', 'live site', 'url'],
+    reply: 'This portfolio is live at https://dipeshdhakal1522.com.np \u2014 explore the projects, skills, and contact sections, or use the Terminal CLI (\u2318K).'
   },
   {
     keywords: ['availability', 'hire', 'freelance', 'available', 'work with'],
