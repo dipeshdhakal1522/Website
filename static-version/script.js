@@ -455,10 +455,6 @@ function termPrint(text, cls) {
 
 function termCommand(cmd) {
   const t = cmd.trim().toLowerCase();
-  const banner =
-    '\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\n' +
-    '\u2591  DIPESH DHAKAL \u2014 PORTFOLIO OS  \u2591\n' +
-    '\u2591  Security \u2022 Development \u2022 Design \u2022 Data  \u2591\n' +
     '\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\n';
 
   switch (t) {
@@ -584,6 +580,7 @@ function openResume() {
   document.body.style.overflow = 'hidden';
 }
 
+$('#open-resume').addEventListener('click', openResume);
 $('#close-resume').addEventListener('click', () => {
   $('#resume-modal').classList.remove('open');
   document.body.style.overflow = '';
@@ -596,7 +593,7 @@ $('#copy-email').addEventListener('click', async () => {
     const btn = $('#copy-email');
     btn.textContent = 'Copied!';
     setTimeout(() => (btn.textContent = 'Copy'), 2000);
-  } catch (_) {
+  } catch (err) {
     window.prompt('Copy email:', DATA.email);
   }
 });
@@ -633,4 +630,165 @@ $$('.modal-backdrop').forEach((m) => {
       document.body.style.overflow = '';
     }
   });
+});
+
+/* ============================= AI CHAT BOT ============================= */
+const chatBody = $('#chat-body');
+const chatInput = $('#chat-input');
+const CHAT_KNOWLEDGE = [
+  {
+    keywords: ['hi', 'hello', 'hey', 'namaste', 'namaskar', 'hola'],
+    reply: 'Hello! I am DipeshBot, the AI assistant for this portfolio. Ask me about Dipesh\'s skills, projects, education, experience, or contact details.'
+  },
+  {
+    keywords: ['who are you', 'your name', 'about you'],
+    reply: 'I am DipeshBot \u2014 a portfolio assistant that knows everything about Dipesh Dhakal: skills, projects, education, and how to reach him. Try asking "What are his skills?" or "Top projects?".'
+  },
+  {
+    keywords: ['about dipesh', 'tell me about', 'about him', 'who is dipesh'],
+    reply: DATA.bio + ' ' + DATA.aboutParagraphs[0]
+  },
+  {
+    keywords: ['skill', 'tech', 'tools', 'competenc', 'stack', 'languages'],
+    reply: 'Dipesh works across four areas:\n' +
+      DATA.skills.map((c) => '\u2022 ' + c.title + ': ' + c.skills.slice(0, 3).map((s) => s[0]).join(', ') + '...').join('\n') +
+      '\nAsk "full skills" for the complete list.'
+  },
+  {
+    keywords: ['full skills', 'all skills', 'complete skills'],
+    reply: DATA.skills.map((c) => c.title + '\n' + c.skills.map(([n, l]) => '  \u2022 ' + n + ' [' + l + ']').join('\n')).join('\n\n')
+  },
+  {
+    keywords: ['project', 'portfolio', 'work', 'built', 'code'],
+    reply: DATA.projects.map((p) => '\u2022 ' + p.title + ' \u2014 ' + p.subtitle + ' (' + p.category + ')').join('\n') +
+      '\n\nAsk about any project by name (e.g. "SaanjhCyber") for details.'
+  },
+  {
+    keywords: ['saanjh', 'saanjhcyber'],
+    reply: DATA.projects[0].detail + '\n\nGitHub: https://github.com/dipeshdhakal1522/SaanjhCyber'
+  },
+  {
+    keywords: ['noir', 'noirlink', 'nepse', 'stock', 'trading'],
+    reply: DATA.projects[1].detail + '\n\nGitHub: https://github.com/dipeshdhakal1522/-NoirLink-Traderchang'
+  },
+  {
+    keywords: ['file integrity', 'integrity'],
+    reply: DATA.projects[2].detail + '\n\nGitHub: https://github.com/dipeshdhakal1522/File-Integrity-Authenticity-Verification-System'
+  },
+  {
+    keywords: ['news crawler', 'crawler', 'scraping', 'scraper'],
+    reply: DATA.projects[3].detail + '\n\nGitHub: https://github.com/dipeshdhakal1522/news_crawler'
+  },
+  {
+    keywords: ['education', 'study', 'university', 'degree', 'college', 'academic'],
+    reply: DATA.education.map((e) => '\u2022 ' + e.degree + '\n  ' + e.institution + ' \u2014 ' + e.duration).join('\n')
+  },
+  {
+    keywords: ['coventry', 'bsc', 'hons', 'ethical hacking'],
+    reply: 'Dipesh completed a BSc (Hons) in Ethical Hacking and Cyber Security at Coventry University (2022 \u2013 May 2025), specializing in penetration testing, web application security, digital forensics, cryptography, and system hardening.'
+  },
+  {
+    keywords: ['experience', 'job', 'work history', 'career', 'intern', 'worked'],
+    reply: DATA.experiences.map((x) => '\u2022 ' + x.title + ' \u2014 ' + x.org + ' (' + x.duration + ')').join('\n') +
+      '\n\nAsk about any role for more detail.'
+  },
+  {
+    keywords: ['certificate', 'certification', 'award', 'credential'],
+    reply: 'Dipesh holds 15+ certifications across cybersecurity, networking, UI/UX, and training programs, including Ethical Hacking & Web Application Security (Coventry University) and Enterprise Networking (Nepal Telecom Training).'
+  },
+  {
+    keywords: ['contact', 'email', 'phone', 'reach', 'message', 'connect'],
+    reply: 'You can reach Dipesh at:\n\u2022 Email: ' + DATA.email + '\n\u2022 Phone: ' + DATA.phone + '\n\u2022 LinkedIn: ' + DATA.linkedin + '\n\nOr use the contact form on this page.'
+  },
+  {
+    keywords: ['location', 'where', 'based', 'kathmandu', 'nepal'],
+    reply: 'Dipesh is based in ' + DATA.location + '.'
+  },
+  {
+    keywords: ['github', 'open source', 'repos', 'repository'],
+    reply: 'GitHub: ' + DATA.github + '\n\nRepositories include SaanjhCyber, NoirLink Trading, File Integrity System, and News Crawler.'
+  },
+  {
+    keywords: ['availability', 'hire', 'freelance', 'available', 'work with'],
+    reply: 'Dipesh is available for security audits, penetration testing, and web development projects. Send a message via the contact form or email dipeshrajdhakal@gmail.com.'
+  },
+  {
+    keywords: ['terminal', 'cli', 'command'],
+    reply: 'You can explore this portfolio interactively using the Terminal CLI button (\u2318K) in the top bar \u2014 try commands like "skills", "projects", or "contact".'
+  },
+  {
+    keywords: ['resume', 'cv', 'curriculum'],
+    reply: 'Use the "Download CV" button in the sidebar to view the full resume with education, experience, and skills.'
+  },
+  {
+    keywords: ['thanks', 'thank you', 'thx', 'appreciate'],
+    reply: 'You are welcome! Feel free to ask anything else about Dipesh\u2019s work. \uD83D\uDE42'
+  },
+  {
+    keywords: ['bye', 'goodbye', 'exit', 'see you'],
+    reply: 'Goodbye! Dipesh looks forward to hearing from you. \uD83D\uDC4B'
+  }
+];
+const CHAT_SUGGESTIONS = ['Who is Dipesh Dhakal?', 'What are his skills?', 'Top projects', 'Education', 'How to contact?'];
+
+function chatAnswer(input) {
+  const q = String(input).toLowerCase().trim();
+  for (const item of CHAT_KNOWLEDGE) {
+    if (item.keywords.some((k) => q.includes(k))) return item.reply;
+  }
+  return 'I am not sure about that one. Try asking about skills, projects, education, experience, or contact details.';
+}
+
+function chatAdd(text, role) {
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.textContent = text;
+  chatBody.appendChild(div);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function chatSend(text) {
+  const clean = String(text).trim();
+  if (!clean) return;
+  chatAdd(clean, 'user');
+  chatInput.value = '';
+  const dots = document.createElement('div');
+  dots.className = 'typing-dots';
+  dots.innerHTML = '<span></span><span></span><span></span>';
+  chatBody.appendChild(dots);
+  chatBody.scrollTop = chatBody.scrollHeight;
+  setTimeout(() => {
+    dots.remove();
+    chatAdd(chatAnswer(clean), 'bot');
+  }, 700);
+}
+
+$('#chat-toggle').addEventListener('click', () => {
+  const panel = $('#chat-panel');
+  const wasOpen = panel.classList.contains('open');
+  panel.classList.toggle('open');
+  $('#chat-toggle').textContent = wasOpen ? '\u{1F916}' : '\u00D7';
+  if (!wasOpen && chatBody.children.length === 0) {
+    chatAdd('Hi! I am DipeshBot \u{1F916} \u2014 ask me anything about Dipesh Dhakal\'s portfolio.', 'bot');
+  }
+  if (!wasOpen) setTimeout(() => chatInput.focus(), 50);
+});
+
+$('#chat-close').addEventListener('click', () => {
+  $('#chat-panel').classList.remove('open');
+  $('#chat-toggle').textContent = '\u{1F916}';
+});
+
+$('#chat-send').addEventListener('click', () => chatSend(chatInput.value));
+
+chatInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') chatSend(chatInput.value);
+});
+
+$('#chat-chips').innerHTML = CHAT_SUGGESTIONS.map((s) =>
+  '<button class="chip">' + s + '</button>'
+).join('');
+
+$$('#chat-chips .chip').forEach((chip) => {
+  chip.addEventListener('click', () => chatSend(chip.textContent));
 });

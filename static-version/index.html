@@ -26,7 +26,7 @@
     </nav>
     <div class="sidebar-socials" id="sidebar-socials"></div>
     <button class="btn-sidebar" id="open-terminal">Terminal CLI <span class="kbd">&#8984;K</span></button>
-    <a href="#contact" class="btn-sidebar">Download CV</a>
+    <button class="btn-sidebar" id="open-resume">Download CV</button>
   </aside>
 
   <!-- Desktop Navbar -->
@@ -261,6 +261,29 @@
       <button class="modal-close" id="close-resume">&times;</button>
       <div class="modal-body" id="resume-body"></div>
     </div>
+  </div>
+
+  <!-- AI Chat Bot -->
+  <div id="chat-widget">
+    <div id="chat-panel" class="chat-panel">
+      <div class="chat-head">
+        <div class="chat-title">
+          <span class="chat-avatar">&#129302;</span>
+          <div>
+            <p class="chat-name">DipeshBot <span class="chat-spark">&#10024;</span></p>
+            <p class="chat-status">online &#8226; portfolio AI</p>
+          </div>
+        </div>
+        <button class="chat-close" id="chat-close" aria-label="Close chat">&times;</button>
+      </div>
+      <div class="chat-body" id="chat-body"></div>
+      <div class="chat-chips" id="chat-chips"></div>
+      <div class="chat-input-row">
+        <input type="text" id="chat-input" placeholder="Ask about Dipesh..." autocomplete="off" />
+        <button class="chat-send" id="chat-send" aria-label="Send">&#10148;</button>
+      </div>
+    </div>
+    <button class="chat-toggle" id="chat-toggle" aria-label="Toggle AI chat">&#129302;</button>
   </div>
 
   <script src="script.js"></script>
